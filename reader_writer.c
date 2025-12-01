@@ -14,13 +14,12 @@ void *reader(void *arg) {
     pthread_mutex_lock(&mutex);
     read_count++;
 
-    if(read_count == 1) {
+    if(read_count == 1) 
         sem_wait(&write_sem);
-    }
     pthread_mutex_unlock(&mutex);
 
-    print("Reader %d: Read data = %d\n", id, shared_data);
-    sleep(1)
+    printf("Reader %d: Read data = %d\n", id, shared_data);
+    sleep(1);
 
     pthread_mutex_lock(&mutex);
     read_count--;
@@ -34,7 +33,7 @@ void *writer(void *arg){
 
     sem_wait(&write_sem);
     shared_data++;
-    print("Write %d: Wrote data = %d\n", id, shared_data);
+    printf("Writer %d: Wrote data = %d\n", id, shared_data);
     sleep(1);
 
     sem_post(&write_sem);

@@ -17,7 +17,7 @@ void *producer(void *arg){
     for(int i=0; i<5; i++){
         int item = (id*10)+i;
 
-        sem_wait(&producer);
+        sem_wait(&empty);
         pthread_mutex_lock(&mutex);
 
         buffer[in] = item;
@@ -34,7 +34,7 @@ void *producer(void *arg){
     return NULL;
 }
 
-voif consumer(coid *arg){
+void *consumer(void *arg){
     int id = *((int *) arg);
 
     for(int i=0; i<5; i++){
@@ -42,7 +42,7 @@ voif consumer(coid *arg){
         pthread_mutex_lock(&mutex);
 
         int item = buffer[out];
-        print("Consumer %d: consumed item %d from position %d", id, item, out);
+        printf("Consumer %d: consumed item %d from position %d\n", id, item, out);
         out=(out+1)%BUFFER_SIZE;
         pthread_mutex_unlock(&mutex);
         sem_post(&empty);
@@ -52,10 +52,14 @@ voif consumer(coid *arg){
     return NULL;
 }
 
-void main() {
-    pthread_t pod[2], cons[2];
+int main() {
+    pthread_t prod[2], cons[2];
     int producer_ids[2] = {1, 2};
     int consumer_ids[2] = {1, 2};
+
+    sem_init(&empty, 0, BUFFER_SIZE);
+    sem_init(&full, 0, 0);
+    pthread_mutex_init(&mutex, NULL);
 
     for(int i=0; i<2; i++){
         pthread_create(&prod[i], NULL, producer, &producer_ids[i]);
@@ -63,7 +67,7 @@ void main() {
     }
 
     for(int i=0; i<2; i++){
-        pthred_join(prod[i], NULL);
+        pthread_join(prod[i], NULL);
         pthread_join(cons[i], NULL);
     }
 

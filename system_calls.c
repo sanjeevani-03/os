@@ -7,13 +7,13 @@
 #include<string.h>
 
 int main(){
-    pit_t pid;
+    pid_t pid;
     int status, fd;
     char buffer[100];
-    char write_data[] = "Hellow, World!";
+    char write_data[] = "Hello, World!";
 
     printf("Process related system calls \n");
-    printf("parent process id: %d", getpid());
+    printf("parent process id: %d\n", getpid());
 
     pid=fork();
 
@@ -26,26 +26,26 @@ int main(){
         exit(0);
     }
     else{
-        printf("Parent created child with id: %d", pid);
+        printf("Parent created child with id: %d\n", pid);
         wait(&status);
         printf("Child process terminated\n");
     }
 
     printf("\n File related system calls\n");
 
-    fd = open("testfile.txt", O_CREAT);
+    fd = open("testfile.txt", O_CREAT | O_WRONLY, 0644);
 
     if(fd < 0) {
         perror("Failed to open file");
         exit(1);
     }
-    printf("File opened successfully)");
+    printf("File opened successfully\n");
 
     ssize_t bytes_written = write(fd, write_data, strlen(write_data));
     printf("%ld bytes written to file\n", bytes_written);
 
     close(fd);
-    printf("file closed!");
+    printf("file closed!\n");
 
     fd = open("testfile.txt", O_RDONLY);
     if(fd<0){

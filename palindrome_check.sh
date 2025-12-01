@@ -20,3 +20,10 @@ if [ $is_palindrome -eq 1 ]; then
 else
     echo "\"$str\" is not a palindrome"
 fi
+
+#rev = echo $str | rev
+#if [ "$str" = "$rev" ]; then
+#    echo "\"$str\" is a palindrome"
+#else
+#    echo "\"$str\" is not a palindrome"
+#fi
